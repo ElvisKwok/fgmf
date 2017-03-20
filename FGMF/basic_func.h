@@ -21,3 +21,5 @@ void matrixMultiply(typeRate *matrixA, typeRate *matrixB, typeRate *matrixResult
 
 typeRate innerProduct(typeRate *matrixUser, typeRate *matrixItem, int userIdx, int itemIdx);
 #endif
+
+//test
