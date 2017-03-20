@@ -20,6 +20,8 @@ int K;						// 隐含向量维数
 int subBlockNumL = 64;		// subBlockNumL * subBlockNumL个子块
 int threads_per_block;		// 一个block包含的线程数
 
+int isShuffle;
+
 // DELETE
 typeRate **matrixRate;		// 评分矩阵 size: M * N
 
@@ -205,6 +207,7 @@ void initParameter()
 	scanf("K = %d\n", &K);
 	scanf("subBlockNumL = %d\n", &subBlockNumL);
 	scanf("threads_per_block = %d\n", &threads_per_block);
+	scanf("isShuffle = %d\n", &isShuffle);
 
 	fclose(stdin);
 	freopen("CON", "r", stdin);   //"CON"代表控制台
@@ -222,6 +225,7 @@ void initParameter()
 	cout << "K = " << K << endl;
 	cout << "subBlockNumL = " << subBlockNumL << endl;
 	cout << "threads_per_block = " << threads_per_block << endl;
+	cout << "isShuffle = " << isShuffle << endl;
 	cout << endl;
 	//*/
 
@@ -1349,7 +1353,10 @@ void unitTest()
 		CALL_FUN_TIME(initAllData())
 
 		//matrixShuffle();
-		CALL_FUN_TIME(matrixShuffle())
+		if (isShuffle != 0)
+		{
+			CALL_FUN_TIME(matrixShuffle())
+		}
 
 		//sortRateNodeArrayBid();
 		CALL_FUN_TIME(sortRateNodeArrayBid())
