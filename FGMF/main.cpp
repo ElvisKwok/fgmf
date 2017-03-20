@@ -14,18 +14,18 @@
 
 using namespace std;
 extern string inputFile;
-string outputFile; 
+string outputFile;
 
 // test label
 void label_matrix(int *matrixA, int N)
 {
-	for (int i = 0; i < N; ++i)
-	{
-		for (int j = 0; j < N; ++j)
-		{
-			*(matrixA + i*N + j) = (N - i + j) % N;
-		}
-	}
+    for(int i = 0; i < N; ++i)
+    {
+        for(int j = 0; j < N; ++j)
+        {
+            *(matrixA + i * N + j) = (N - i + j) % N;
+        }
+    }
 }
 
 /*
@@ -55,45 +55,42 @@ getchar();
 
 void test()
 {
-	//string outputFile = "output/console_output.txt";
-	outputFile = "output/result_" + inputFile.substr(inputFile.find('/') + 1);
-	stringstream ss;
-	ss << (int)time(NULL);
-	outputFile += ss.str();
-	//freopen(outputFile.c_str(), "w", stdout);
-
-	unitTest();
-
+    //string outputFile = "output/console_output.txt";
+    outputFile = "output/result_" + inputFile.substr(inputFile.find('/') + 1);
+    stringstream ss;
+    ss << (int)time(NULL);
+    outputFile += ss.str();
+    //freopen(outputFile.c_str(), "w", stdout);
+    unitTest();
 }
 
 
 int main(int argc, char** argv)
 {
-	srand((unsigned)time(NULL));
+    srand((unsigned)time(NULL));
 
-	if (argc > 1){
-		inputFile = argv[1];
-	}
-	if (argc > 2){
-		outputFile = argv[2];
-	}
+    if(argc > 1)
+    {
+        inputFile = argv[1];
+    }
+
+    if(argc > 2)
+    {
+        outputFile = argv[2];
+    }
 
 #if 0
-	string inputFile = "input.txt";
-	string outputFile = "output.txt";
-	freopen(inputFile.c_str(), "r", stdin);
-	freopen(outputFile.c_str(), "w", stdout);
+    string inputFile = "input.txt";
+    string outputFile = "output.txt";
+    freopen(inputFile.c_str(), "r", stdin);
+    freopen(outputFile.c_str(), "w", stdout);
 #endif
-
-	//callGPU();
-	test();
-
-	//execute();
-
-	//getchar();
-	fclose(stdout);
-	//fclose(stdin);
-
-	return 0;
+    //callGPU();
+    test();
+    //execute();
+    //getchar();
+    fclose(stdout);
+    //fclose(stdin);
+    return 0;
 }
 

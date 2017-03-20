@@ -20,7 +20,7 @@ using namespace::std;
 typedef uint32_t vint;
 typedef double dweight;
 //typedef std::tuple<vint, vint, float> edge;
- 
+
 extern struct sRateNode;
 
 int parallelReadFile(std::string &graphpath, std::vector<sRateNode> &edges);

@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <chrono>   
+#include <chrono>
 #include <map>
 
 #include "basic_func.h"
@@ -24,20 +24,23 @@ using namespace chrono;
 // CALL_FUN_TIME(test(10))
 #define CALL_FUN_TIME(FUN) \
 { \
-	auto start = system_clock::now(); \
-	(FUN); \
-	auto end = system_clock::now(); \
-	auto duration = duration_cast<microseconds>(end - start); \
-	cout << "it takes " #FUN ": \t\t" << double(duration.count()) * microseconds::period::num / microseconds::period::den << " seconds" << endl; \
+    auto start = system_clock::now(); \
+    (FUN); \
+    auto end = system_clock::now(); \
+    auto duration = duration_cast<microseconds>(end - start); \
+    cout << "it takes " #FUN ": \t\t" << double(duration.count()) * microseconds::period::num / microseconds::period::den << " seconds" << endl; \
 }
 
 // debug
 template <typename T>
 void printVar(string varName, const T &var)
 {
-	cout << varName << ": \t" << var << endl;
+    cout << varName << ": \t" << var << endl;
 }
-inline void printLine() { cout << "#######################################" << endl; }
+inline void printLine()
+{
+    cout << "#######################################" << endl;
+}
 void unitTest();
 
 // 读取输入文件：
@@ -63,61 +66,63 @@ void initAllData();
 
 
 // sWorkset: 记录每个子块b_xy（bid）在评分矩阵R的边界beg, end
-struct sWorkset{
-	int beg;
-	int end;
+struct sWorkset
+{
+    int beg;
+    int end;
 
-	// 无用的成员函数
-	/*
-	sWorkset() : beg(0), end(0){}
-	sWorkset(int a, int b) : beg(a), end(b) {}
-	sWorkset &operator=(const sWorkset &rhs)
-	{
-	// 首先检测等号右边的是否就是左边的对象本，若是本对象本身,则直接返回
-	if (this == &rhs)
-	{
-	return *this;
-	}
+    // 无用的成员函数
+    /*
+    sWorkset() : beg(0), end(0){}
+    sWorkset(int a, int b) : beg(a), end(b) {}
+    sWorkset &operator=(const sWorkset &rhs)
+    {
+    // 首先检测等号右边的是否就是左边的对象本，若是本对象本身,则直接返回
+    if (this == &rhs)
+    {
+    return *this;
+    }
 
-	// 复制等号右边的成员到左边的对象中
-	this->beg = rhs.beg;
-	this->end = rhs.end;
+    // 复制等号右边的成员到左边的对象中
+    this->beg = rhs.beg;
+    this->end = rhs.end;
 
-	// 把等号左边的对象再次传出
-	// 目的是为了支持连等 eg:    a=b=c 系统首先运行 b=c
-	// 然后运行 a= ( b=c的返回值,这里应该是复制c值后的b对象)
-	return *this;
-	}
-	void print(){ cout << beg << "\t" << end << endl; }
-	void setBeg(int subBlockIdxX, int subBlockIdxY);
-	void setEnd(int subBlockIdxX, int subBlockIdxY);
+    // 把等号左边的对象再次传出
+    // 目的是为了支持连等 eg:    a=b=c 系统首先运行 b=c
+    // 然后运行 a= ( b=c的返回值,这里应该是复制c值后的b对象)
+    return *this;
+    }
+    void print(){ cout << beg << "\t" << end << endl; }
+    void setBeg(int subBlockIdxX, int subBlockIdxY);
+    void setEnd(int subBlockIdxX, int subBlockIdxY);
 
-	void setFromInput(int a, int b) { beg = a; end = b; }
-	*/
+    void setFromInput(int a, int b) { beg = a; end = b; }
+    */
 };
 
 
 // sWorkseg: 记录子块bid中每个评价值组tag的边界from和to
-struct sWorkseg {
-	int from;
-	int to;
+struct sWorkseg
+{
+    int from;
+    int to;
 };
 
 
 // 评分矩阵非零元素
 struct sRateNode
 {
-	int u;	// userIdx
-	int i;	// itemIdx
-	typeRate rate;
-	int bid;
-	int subBlockIdxX;
-	int subBlockIdxY;
-	int label;
+    int u;  // userIdx
+    int i;  // itemIdx
+    typeRate rate;
+    int bid;
+    int subBlockIdxX;
+    int subBlockIdxY;
+    int label;
 
-	sRateNode(){}
-	sRateNode(int inputU, int inputI, typeRate inputRate) :
-		u(inputU), i(inputI), rate(inputRate) {}
+    sRateNode() {}
+    sRateNode(int inputU, int inputI, typeRate inputRate) :
+        u(inputU), i(inputI), rate(inputRate) {}
 };
 
 // 计算rateNode所属的子块下标x y和bid
@@ -141,22 +146,22 @@ void sortRateNodeArrayBid();
 // block子方块
 struct sSubBlock
 {
-	int bid;
-	int subBlockIdxX;
-	int subBlockIdxY;
-	int rateNum;
-	sRateNode *subBlockNodeArray;
-	int pattern;
+    int bid;
+    int subBlockIdxX;
+    int subBlockIdxY;
+    int rateNum;
+    sRateNode *subBlockNodeArray;
+    int pattern;
 
-	sSubBlock() {}
-	sSubBlock(int blockId, int size, sRateNode *nodeArray = NULL) :
-		bid(blockId), rateNum(size), subBlockNodeArray(nodeArray){}
+    sSubBlock() {}
+    sSubBlock(int blockId, int size, sRateNode *nodeArray = NULL) :
+        bid(blockId), rateNum(size), subBlockNodeArray(nodeArray) {}
 };
 
 // DELETE
 // setSubBlockIdx()
-// setRateNum() 
-// allocSubBlockNodeArray() 
+// setRateNum()
+// allocSubBlockNodeArray()
 // labelNodeInSubBlock()
 /*
 // 根据bid设置子块x y坐标
@@ -320,11 +325,11 @@ void getBlockXY(int bid, int &x, int &y);
 void getBlockXY(int u, int i, int &x, int &y);
 
 
-// 记录子块b_xy的ID: bid到二维数组pattern(s, t) 
+// 记录子块b_xy的ID: bid到二维数组pattern(s, t)
 // 子块b_xy 是第s种模式中的第t个子块, 则把computeSubBlockID(z, x, y)的结果放入pattern(s,t)
 void setPattern(int s, int t, int x, int y);
 
-// 记录子块b_xy的ID: bid到二维数组pattern(s, t) 
+// 记录子块b_xy的ID: bid到二维数组pattern(s, t)
 // 子块bid是第s种模式中的第t个子块, 则把bid放入pattern(s,t)
 void setPattern(int s, int t, int bid);
 
