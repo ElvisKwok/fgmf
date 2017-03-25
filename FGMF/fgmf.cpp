@@ -1370,7 +1370,7 @@ void printNodeArrayMatrix()
 
 
 
-// debug:
+// debug: 
 void unitTest()
 {
     CALL_FUN_TIME(initParameter())
