@@ -1,0 +1,26 @@
+MAX_ITER = 10
+MAX_SHUFFLE = 10
+lambda = 0.05
+gamma = 0.003
+M = 71567
+N = 65133
+K = 1
+subBlockNumL = 32
+threads_per_block = 1024
+ompNumThread = 2
+isShuffle = 1
+
+//MovieLens
+//int M = 71567
+//int N = 65133
+//const int K = 40
+
+//Netflix
+//int M = 480189
+//int N = 17770
+//const int K = 40
+
+//BDMovie
+//M = 9722
+//N = 7889
+//subBlockNumL = 16

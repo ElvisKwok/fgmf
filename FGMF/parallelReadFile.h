@@ -23,6 +23,6 @@ typedef double dweight;
 
 extern struct sRateNode;
 
-int parallelReadFile(std::string &graphpath, std::vector<sRateNode> &edges);
+int parallelReadFile(std::string &graphpath, std::vector<sRateNode> &edges, int ompNumThread);
 
 #endif

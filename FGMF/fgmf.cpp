@@ -19,6 +19,7 @@ double gamma;               // 学习率
 int K;                      // 隐含向量维数
 int subBlockNumL = 64;      // subBlockNumL * subBlockNumL个子块
 int threads_per_block;      // 一个block包含的线程数
+int ompNumThread;			// 限制omp线程数，用于实验
 
 int isShuffle;
 
@@ -92,7 +93,7 @@ void readFile(string fileName)
     }
     */
     // parallel read
-    parallelReadFile(fileName, rateNodeVector);
+	parallelReadFile(fileName, rateNodeVector, ompNumThread);
     NNZ = rateNodeVector.size();
     rateNodeArray = &rateNodeVector[0];
 }
@@ -215,6 +216,7 @@ void initParameter()
     scanf("K = %d\n", &K);
     scanf("subBlockNumL = %d\n", &subBlockNumL);
     scanf("threads_per_block = %d\n", &threads_per_block);
+	scanf("ompNumThread = %d\n", &ompNumThread);
     scanf("isShuffle = %d\n", &isShuffle);
     fclose(stdin);
     freopen("CON", "r", stdin);   //"CON"代表控制台
@@ -230,6 +232,7 @@ void initParameter()
     cout << "K = " << K << endl;
     cout << "subBlockNumL = " << subBlockNumL << endl;
     cout << "threads_per_block = " << threads_per_block << endl;
+	cout << "ompNumThread = " << ompNumThread << endl;
     cout << "isShuffle = " << isShuffle << endl;
     cout << endl;
     //*/

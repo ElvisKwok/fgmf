@@ -92,7 +92,7 @@ struct edge_parser      // egde相当于rateNode
     }
 };
 
-int parallelReadFile(std::string &graphpath, std::vector<sRateNode> &edges)
+int parallelReadFile(std::string &graphpath, std::vector<sRateNode> &edges, int ompNumThread)
 {
     //graphpath = "E:\\code\\gpu\\test\\sgd-single-kernel\\sgd-single-kernel\\input.txt";
     HANDLE hd = CreateFile(graphpath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -109,14 +109,18 @@ int parallelReadFile(std::string &graphpath, std::vector<sRateNode> &edges)
     if(data == NULL)
         std::cerr << "map(2): " << GetLastError();
 
-    const int          nthread = omp_get_max_threads();
+    //const int          nthread = omp_get_max_threads();
+	const int          nthread = ompNumThread;
     //const size_t       zchunk = 1024 * 64;  // 64KB
     const size_t       zchunk = 1024 * 1024 * 64;  // 64MiB
     const size_t       nchunk = size / zchunk + (size % zchunk > 0);
-    //std::vector<std::deque<sRateNode>> eparts(nthread);   // FIXME: slow clean up
+    //std::vector<std::deque<sRateNode>> eparts(nthread);
     std::vector<std::vector<sRateNode>> eparts(nthread);
-    #pragma omp parallel for schedule(dynamic, 1)
-
+    
+	//#pragma omp parallel for schedule(dynamic, 1)
+	#pragma omp parallel num_threads(nthread)
+	{
+	#pragma omp for schedule(dynamic, 1)
     for(int i = 0; i < nchunk; ++i)
     {
         const char* p = data + zchunk * i;
@@ -132,6 +136,7 @@ int parallelReadFile(std::string &graphpath, std::vector<sRateNode> &edges)
             edge_parser(p, q)(std::back_inserter(eparts[omp_get_thread_num()])); //实现在容器尾部插入元素。
         }
     }
+	}
 
     // Compute indices to copy each element of `eparts` to
     std::vector<size_t> eheads(nthread + 1);
@@ -141,12 +146,15 @@ int parallelReadFile(std::string &graphpath, std::vector<sRateNode> &edges)
 
     // Gather the edges read by each thread to a single array
     //std::vector<sRateNode> edges(eheads.back());
-    edges.resize(eheads.back());
-    #pragma omp parallel for schedule(guided, 1)
+	edges.resize(eheads.back());
 
-    for(int t = 0; t < nthread; ++t)
-        boost::copy(eparts[t], edges.begin() + eheads[t]);
-
+	//#pragma omp parallel for schedule(guided, 1)
+	#pragma omp parallel num_threads(nthread)
+	{
+		#pragma omp for schedule(guided, 1)
+		for (int t = 0; t < nthread; ++t)
+			boost::copy(eparts[t], edges.begin() + eheads[t]);
+	}
     cout << "edge size:" << edges.size() << "\n" << endl;
 
     // Gather the edges read by eac
