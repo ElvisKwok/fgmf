@@ -102,8 +102,8 @@ void test()
 		outputFile += ss.str();
 	}
     freopen(outputFile.c_str(), "w", stdout);
-    //unitTest();
-	idMap(inputFile);
+	//idMap(inputFile);
+    unitTest();
 }
 
 

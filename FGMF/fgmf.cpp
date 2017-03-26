@@ -13,7 +13,7 @@ string modelFile = "output/model.txt";
 
 // 各种模块测试选项
 int testReadFile = 0;		// 只测试读文件？
-
+int testShuffle = 0;		// 只测试读文件？
 
 int MAX_ITER;               // 最大迭代次数
 int MAX_SHUFFLE;            // 最大矩阵变换次数
@@ -223,6 +223,7 @@ void initParameter()
     scanf("ompNumThread = %d\n", &ompNumThread);
     scanf("isShuffle = %d\n", &isShuffle);
 	scanf("testReadFile = %d\n", &testReadFile);
+	scanf("testShuffle = %d\n", &testShuffle);
 	
     fclose(stdin);
     freopen("CON", "r", stdin);   //"CON"代表控制台
@@ -240,7 +241,8 @@ void initParameter()
     cout << "threads_per_block = " << threads_per_block << endl;
     cout << "ompNumThread = " << ompNumThread << endl;
     cout << "isShuffle = " << isShuffle << endl;
-	cout << "testReadFile = " << isShuffle << endl;
+	cout << "testReadFile = " << testReadFile << endl;
+	cout << "testShuffle = " << testShuffle << endl;
     cout << endl;
     //*/
     //getchar();
@@ -803,7 +805,7 @@ void rowShuffle(vector<int> &curPermRow, vector<int> &bestPermRow)
     */
 	random_shuffle(curPermRow.begin(), curPermRow.end(), p_myrandom);
 	//#pragma omp parallel for
-	#pragma omp parallel num_threads(nthread)
+	#pragma omp parallel num_threads(ompNumThread)
 	{
 		#pragma omp for
 		for (int i = 0; i < NNZ; ++i)
@@ -818,7 +820,7 @@ void rowShuffle(vector<int> &curPermRow, vector<int> &bestPermRow)
 	}
 
     //#pragma omp parallel for
-	#pragma omp parallel num_threads(nthread)
+	#pragma omp parallel num_threads(ompNumThread)
 	{
 		#pragma omp for
 		for (int i = 0; i < M; ++i)
@@ -841,27 +843,33 @@ void columnShuffle(vector<int> &curPermColumn, vector<int> &bestPermColumn)
     permColumn[i] = i;
     }
     */
-    random_shuffle(curPermColumn.begin(), curPermColumn.end(), p_myrandom);
-    // debug:
-    //printList(&permColumn[0], N);
-    #pragma omp parallel for
+	random_shuffle(curPermColumn.begin(), curPermColumn.end(), p_myrandom);
+	// debug:
+	//printList(&permColumn[0], N);
+	//#pragma omp parallel for
+	#pragma omp parallel num_threads(ompNumThread)
+	{
+		#pragma omp for
+		for (int i = 0; i < NNZ; ++i)
+		{
+			//question: 竞争?
+			/*
+			itemIdx = rateNodeArray[i].i - 1;
+			rateNodeArray[i].i = permColumn[itemIdx];   // FIXME: 假设数据集idx： 1~N
+			*/
+			rateNodeArray[i].i = curPermColumn[rateNodeArray[i].i - 1]; // FIXME: 假设数据集idx： 1~N
+		}
+	}
 
-    for(int i = 0; i < NNZ; ++i)
-    {
-        //question: 竞争?
-        /*
-        itemIdx = rateNodeArray[i].i - 1;
-        rateNodeArray[i].i = permColumn[itemIdx];   // FIXME: 假设数据集idx： 1~N
-        */
-        rateNodeArray[i].i = curPermColumn[rateNodeArray[i].i - 1]; // FIXME: 假设数据集idx： 1~N
-    }
-
-    #pragma omp parallel for
-
-    for(int i = 0; i < N; ++i)
-    {
-        bestPermColumn[i] = curPermColumn[bestPermColumn[i] - 1];
-    }
+    //#pragma omp parallel for
+	#pragma omp parallel num_threads(ompNumThread)
+	{
+		#pragma omp for
+		for (int i = 0; i < N; ++i)
+		{
+			bestPermColumn[i] = curPermColumn[bestPermColumn[i] - 1];
+		}
+	}
 
     // debug:
     //printNodeArrayAsMatrix();
@@ -919,6 +927,7 @@ void matrixShuffle()
 
     for(int i = 0; i < MAX_SHUFFLE; ++i)
     {
+#if 0
         // 交给computeSubsetArray()避免多次遍历
         //resetAllNode_blockIdx();  // 变换后重置bid
         //sortRateNodeArrayBid();
@@ -955,7 +964,7 @@ void matrixShuffle()
             printList(&bestPermColumn[0], N);
             */
         }
-
+#endif
         // 保存之前的best再变换，最后一次变换不采用
         rowShuffle(curPermRow, bestPermRow);
         columnShuffle(curPermColumn, bestPermColumn);
@@ -977,7 +986,7 @@ void matrixShuffleApply()
 
     //应用最终的变换
     //#pragma omp parallel for
-	#pragma omp parallel num_threads(nthread)
+	#pragma omp parallel num_threads(ompNumThread)
 	{
 		#pragma omp for
 		for (int i = 0; i < NNZ; ++i)
@@ -1410,6 +1419,7 @@ void unitTest()
     {
         CALL_FUN_TIME(matrixShuffle())
     }
+	if (testShuffle == 1) return;
 
     //sortRateNodeArrayBid();
     CALL_FUN_TIME(sortRateNodeArrayBid())
