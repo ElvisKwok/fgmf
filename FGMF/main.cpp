@@ -16,6 +16,8 @@ using namespace std;
 extern string inputFile;
 string outputFile;
 
+extern int experimentVar1;
+
 // test label
 void label_matrix(int *matrixA, int N)
 {
@@ -120,6 +122,11 @@ int main(int argc, char** argv)
     {
         outputFile = argv[2];
     }
+
+	if(argc > 3)
+	{
+		experimentVar1 = argv[2];
+	}
 
 #if 0
     string inputFile = "input.txt";

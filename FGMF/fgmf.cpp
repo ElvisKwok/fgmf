@@ -11,7 +11,9 @@ string inputFile = "input/ra.train_awk";
 string resultFile = "output/predict_result.txt";
 string modelFile = "output/model.txt";
 
+
 // 各种模块测试选项
+int experimentVar1;			// 输入变化的命令行参数
 int testReadFile = 0;		// 只测试读文件？
 int testShuffle = 0;		// 只测试读文件？
 
@@ -224,6 +226,8 @@ void initParameter()
     scanf("isShuffle = %d\n", &isShuffle);
 	scanf("testReadFile = %d\n", &testReadFile);
 	scanf("testShuffle = %d\n", &testShuffle);
+
+	ompNumThread = experimentVar1;
 	
     fclose(stdin);
     freopen("CON", "r", stdin);   //"CON"代表控制台
