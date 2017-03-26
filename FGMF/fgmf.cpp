@@ -96,45 +96,6 @@ void readFile(string fileName)
     }
     */
 
-	// serial id Map
-	ifstream inputFile(fileName);
-	int userIdx, mapUserIdx;
-	int itemIdx, mapItemIdx;
-	double rate;
-	unordered_map<int, int> userMap;
-	unordered_map<int, int> itemMap;
-	long userCnt = 0;
-	long itemCnt = 0;
-	while (!inputFile.eof())
-	{
-		inputFile >> userIdx >> itemIdx >> rate;
-		mapUserIdx = userIdx;
-		mapItemIdx = itemIdx;
-		if (userMap.find(userIdx) == userMap.end())
-		{
-			mapUserIdx = userCnt;
-			userMap[userIdx] = (userCnt++);
-		}
-		else
-		{
-			mapUserIdx = userMap[userIdx];
-		}
-		if (itemMap.find(itemIdx) == itemMap.end())
-		{
-			mapItemIdx = itemCnt;
-			itemMap[itemIdx] = (itemCnt++);
-		}
-		else
-		{
-			mapItemIdx = itemMap[itemIdx];
-		}
-		cout << mapUserIdx << " " << mapItemIdx << " " << rate << endl;
-	}
-	return;
-
-
-
-
     // parallel read
 	parallelReadFile(fileName, rateNodeVector, ompNumThread);
     NNZ = rateNodeVector.size();

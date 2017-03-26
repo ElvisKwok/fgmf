@@ -53,6 +53,45 @@ getchar();
 }
 */
 
+
+void idMap(string fileName)
+{
+	// serial id Map
+	ifstream inputFile(fileName);
+	int userIdx, mapUserIdx;
+	int itemIdx, mapItemIdx;
+	double rate;
+	unordered_map<int, int> userMap;
+	unordered_map<int, int> itemMap;
+	long userCnt = 0;
+	long itemCnt = 0;
+	while (!inputFile.eof())
+	{
+		inputFile >> userIdx >> itemIdx >> rate;
+		// bug: empty line keeps userIdx/itemIdx the last value, which cause replica of last line
+		if (userMap.find(userIdx) == userMap.end())
+		{
+			mapUserIdx = userCnt;
+			userMap[userIdx] = (userCnt++);
+		}
+		else
+		{
+			mapUserIdx = userMap[userIdx];
+		}
+		if (itemMap.find(itemIdx) == itemMap.end())
+		{
+			mapItemIdx = itemCnt;
+			itemMap[itemIdx] = (itemCnt++);
+		}
+		else
+		{
+			mapItemIdx = itemMap[itemIdx];
+		}
+		cout << mapUserIdx + 1 << " " << mapItemIdx + 1 << " " << rate << endl;
+	}
+}
+
+
 void test()
 {
     //string outputFile = "output/console_output.txt";
@@ -63,7 +102,8 @@ void test()
 		outputFile += ss.str();
 	}
     freopen(outputFile.c_str(), "w", stdout);
-    unitTest();
+    //unitTest();
+	idMap(inputFile);
 }
 
 
