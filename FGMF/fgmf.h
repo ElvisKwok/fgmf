@@ -13,6 +13,9 @@
 #include <chrono>
 #include <map>
 
+#include <unordered_map>
+using std::unordered_map;
+
 #include "basic_func.h"
 #include "parameter.h"
 #include "parallelReadFile.h"
@@ -20,6 +23,7 @@ using namespace std;
 using std::cout;
 
 using namespace chrono;
+
 
 // CALL_FUN_TIME(test(10))
 #define CALL_FUN_TIME(FUN) \
