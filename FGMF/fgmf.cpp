@@ -126,7 +126,7 @@ void readFile(string fileName)
 		}
 		else
 		{
-			mapItemIdx = userMap[itemIdx];
+			mapItemIdx = itemMap[itemIdx];
 		}
 		cout << mapUserIdx << " " << mapItemIdx << " " << rate << endl;
 	}
