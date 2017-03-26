@@ -227,7 +227,8 @@ void initParameter()
 	scanf("testReadFile = %d\n", &testReadFile);
 	scanf("testShuffle = %d\n", &testShuffle);
 
-	ompNumThread = experimentVar1;
+	// 设置命令行实验参数(默认从文件读固定的)
+	//ompNumThread = experimentVar1;
 	
     fclose(stdin);
     freopen("CON", "r", stdin);   //"CON"代表控制台
@@ -931,7 +932,6 @@ void matrixShuffle()
 
     for(int i = 0; i < MAX_SHUFFLE; ++i)
     {
-#if 0
         // 交给computeSubsetArray()避免多次遍历
         //resetAllNode_blockIdx();  // 变换后重置bid
         //sortRateNodeArrayBid();
@@ -968,7 +968,6 @@ void matrixShuffle()
             printList(&bestPermColumn[0], N);
             */
         }
-#endif
         // 保存之前的best再变换，最后一次变换不采用
         rowShuffle(curPermRow, bestPermRow);
         columnShuffle(curPermColumn, bestPermColumn);

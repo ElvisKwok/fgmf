@@ -125,7 +125,7 @@ int main(int argc, char** argv)
 
 	if(argc > 3)
 	{
-		experimentVar1 = argv[2];
+		experimentVar1 = atoi(argv[3]);
 	}
 
 #if 0
