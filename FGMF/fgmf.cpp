@@ -3,13 +3,16 @@
 #include "test.h"
 
 string parameterFile = "input/parameter.txt";
-//string inputFile = "input/ra.train_awk";
-string inputFile = "input/ra.test_awk";
+string inputFile = "input/ra.train_awk";
+//string inputFile = "input/ra.test_awk";
 //string inputFile = "input/BDMovie";
 //string inputFile = "input/input.txt";
 //string inputFile = "input/10by10.txt";
 string resultFile = "output/predict_result.txt";
 string modelFile = "output/model.txt";
+
+// 各种模块测试选项
+int testReadFile = 0;		// 只测试读文件？
 
 
 int MAX_ITER;               // 最大迭代次数
@@ -19,7 +22,7 @@ double gamma;               // 学习率
 int K;                      // 隐含向量维数
 int subBlockNumL = 64;      // subBlockNumL * subBlockNumL个子块
 int threads_per_block;      // 一个block包含的线程数
-int ompNumThread;			// 限制omp线程数，用于实验
+int ompNumThread;           // 限制omp线程数，用于实验
 
 int isShuffle;
 
@@ -216,8 +219,10 @@ void initParameter()
     scanf("K = %d\n", &K);
     scanf("subBlockNumL = %d\n", &subBlockNumL);
     scanf("threads_per_block = %d\n", &threads_per_block);
-	scanf("ompNumThread = %d\n", &ompNumThread);
+    scanf("ompNumThread = %d\n", &ompNumThread);
     scanf("isShuffle = %d\n", &isShuffle);
+	scanf("testReadFile = %d\n", &testReadFile);
+	
     fclose(stdin);
     freopen("CON", "r", stdin);   //"CON"代表控制台
     initBlockDimension();
@@ -232,8 +237,9 @@ void initParameter()
     cout << "K = " << K << endl;
     cout << "subBlockNumL = " << subBlockNumL << endl;
     cout << "threads_per_block = " << threads_per_block << endl;
-	cout << "ompNumThread = " << ompNumThread << endl;
+    cout << "ompNumThread = " << ompNumThread << endl;
     cout << "isShuffle = " << isShuffle << endl;
+	cout << "testReadFile = " << isShuffle << endl;
     cout << endl;
     //*/
     //getchar();
@@ -1370,11 +1376,14 @@ void printNodeArrayMatrix()
 
 
 
-// debug: 
+// debug:
 void unitTest()
 {
     CALL_FUN_TIME(initParameter())
     CALL_FUN_TIME(readFile(inputFile))
+
+    if(testReadFile == 1) return;
+
     /*
     sortRateNodeArrayBid();
     for (int i = 0; i < rateNodeVector.size(); ++i)

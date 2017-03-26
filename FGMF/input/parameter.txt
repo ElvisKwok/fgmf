@@ -7,8 +7,9 @@ N = 65133
 K = 1
 subBlockNumL = 32
 threads_per_block = 1024
-ompNumThread = 2
+ompNumThread = 15
 isShuffle = 1
+testReadFile = 1
 
 //MovieLens
 //int M = 71567

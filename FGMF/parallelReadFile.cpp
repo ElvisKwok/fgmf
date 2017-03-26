@@ -108,7 +108,7 @@ int parallelReadFile(std::string &graphpath, std::vector<sRateNode> &edges, int 
 
     if(data == NULL)
         std::cerr << "map(2): " << GetLastError();
-
+	cout << "omp_get_max_threads() = " << omp_get_max_threads() << endl;
     //const int          nthread = omp_get_max_threads();
 	const int          nthread = ompNumThread;
     //const size_t       zchunk = 1024 * 64;  // 64KB

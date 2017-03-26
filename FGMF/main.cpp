@@ -56,11 +56,13 @@ getchar();
 void test()
 {
     //string outputFile = "output/console_output.txt";
-    outputFile = "output/result_" + inputFile.substr(inputFile.find('/') + 1);
-    stringstream ss;
-    ss << (int)time(NULL);
-    outputFile += ss.str();
-    //freopen(outputFile.c_str(), "w", stdout);
+	if (outputFile.empty()) {
+		outputFile = "output/result_" + inputFile.substr(inputFile.find('/') + 1);
+		stringstream ss;
+		ss << (int)time(NULL);
+		outputFile += ss.str();
+	}
+    freopen(outputFile.c_str(), "w", stdout);
     unitTest();
 }
 
