@@ -801,25 +801,31 @@ void rowShuffle(vector<int> &curPermRow, vector<int> &bestPermRow)
     permRow[i] = i;
     }
     */
-    random_shuffle(curPermRow.begin(), curPermRow.end(), p_myrandom);
-    #pragma omp parallel for
+	random_shuffle(curPermRow.begin(), curPermRow.end(), p_myrandom);
+	//#pragma omp parallel for
+	#pragma omp parallel num_threads(nthread)
+	{
+		#pragma omp for
+		for (int i = 0; i < NNZ; ++i)
+		{
+			//question: 竞争?
+			/*
+			userIdx = rateNodeArray[i].u - 1;
+			rateNodeArray[i].u = permRow[userIdx];  // FIXME: 假设数据集idx： 1~M
+			*/
+			rateNodeArray[i].u = curPermRow[rateNodeArray[i].u - 1];    // FIXME: 假设数据集idx： 1~M
+		}
+	}
 
-    for(int i = 0; i < NNZ; ++i)
-    {
-        //question: 竞争?
-        /*
-        userIdx = rateNodeArray[i].u - 1;
-        rateNodeArray[i].u = permRow[userIdx];  // FIXME: 假设数据集idx： 1~M
-        */
-        rateNodeArray[i].u = curPermRow[rateNodeArray[i].u - 1];    // FIXME: 假设数据集idx： 1~M
-    }
-
-    #pragma omp parallel for
-
-    for(int i = 0; i < M; ++i)
-    {
-        bestPermRow[i] = curPermRow[bestPermRow[i] - 1];
-    }
+    //#pragma omp parallel for
+	#pragma omp parallel num_threads(nthread)
+	{
+		#pragma omp for
+		for (int i = 0; i < M; ++i)
+		{
+			bestPermRow[i] = curPermRow[bestPermRow[i] - 1];
+		}
+	}
 }
 
 // 矩阵列shuffle NNZ版本(基于任意顺序的rateNodeArray)
@@ -970,13 +976,16 @@ void matrixShuffleApply()
     }
 
     //应用最终的变换
-    #pragma omp parallel for
-
-    for(int i = 0; i < NNZ; ++i)
-    {
-        rateNodeArray[i].u = permRow[rateNodeArray[i].u - 1];   // FIXME: 假设数据集idx： 1~M
-        rateNodeArray[i].i = permColumn[rateNodeArray[i].i - 1];    // FIXME: 假设数据集idx： 1~N
-    }
+    //#pragma omp parallel for
+	#pragma omp parallel num_threads(nthread)
+	{
+		#pragma omp for
+		for (int i = 0; i < NNZ; ++i)
+		{
+			rateNodeArray[i].u = permRow[rateNodeArray[i].u - 1];   // FIXME: 假设数据集idx： 1~M
+			rateNodeArray[i].i = permColumn[rateNodeArray[i].i - 1];    // FIXME: 假设数据集idx： 1~N
+		}
+	}
 }
 
 // 暂时不用
