@@ -1395,7 +1395,18 @@ void printNodeArrayMatrix()
 
 
 
-
+void extractRateNode(vector<sMicroNode> &microNodeVec)
+{
+	microNodeVec.clear();
+	for (int i = 0; i < NNZ; ++i)
+	{
+		int userId = rateNodeArray[i].u;
+		int itemId = rateNodeArray[i].i;
+		typeRate rate = rateNodeArray[i].rate;
+		sMicroNode microNode(userId, itemId, rate);
+		microNodeVec.push_back(microNode);
+	}
+}
 
 
 // debug:
@@ -1454,12 +1465,26 @@ void unitTest()
     //printList(&permRow[0], M);
     //printList(&permColumn[0], N);
     //printNodeArrayAsMatrix();
-    ///*
+
+	// microNode
+	//Ö»´«Èë£¨userId, itemId, rate£©
+	vector<sMicroNode> microNodeVec;
+	sMicroNode *microNodeArray = NULL;
+	extractRateNode(microNodeVec);
+	microNodeArray = &microNodeVec[0];
+	
+	CALL_FUN_TIME(solveByGPU(microNodeArray, matrixUser, matrixItem, worksetArray,
+		mWorkseg, matrixPattern, subBlockNumL, subBlockLen,
+		lambda, gamma,
+		NNZ))
+
+    /*
     CALL_FUN_TIME(solveByGPU(rateNodeArray, matrixUser, matrixItem, worksetArray,
                              mWorkseg, matrixPattern, subBlockNumL, subBlockLen,
                              lambda, gamma,
                              NNZ))
-    //*/
+    */
+
     //callKernel(rateNodeArray, matrixUser, matrixItem, M, N, K, worksetArray, mWorkseg, matrixPattern, subBlockNumL, subBlockLen, NNZ);
     //debug:
     /*
