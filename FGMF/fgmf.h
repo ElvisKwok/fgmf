@@ -129,6 +129,21 @@ struct sRateNode
         u(inputU), i(inputI), rate(inputRate) {}
 };
 
+
+// 评分矩阵非零元素
+struct sMicroNode
+{
+	int u;  // userIdx
+	int i;  // itemIdx
+	typeRate rate;
+
+	sMicroNode() {}
+	sMicroNode(int inputU, int inputI, typeRate inputRate) :
+		u(inputU), i(inputI), rate(inputRate) {}
+};
+
+
+
 // 计算rateNode所属的子块下标x y和bid
 void setSubBlockIdx(sRateNode &node);
 
