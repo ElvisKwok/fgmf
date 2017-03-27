@@ -244,7 +244,7 @@ typeRate computeRMSE(sMicroNode *rateNodeArray, typeRate *matrixUser, typeRate *
     return sqrt(err_sum / NNZ);
 }
 
-
+#if 0
 void solveByGPU(
     sRateNode *rateNodeArray,
     typeRate *matrixUser,
@@ -388,6 +388,7 @@ void solveByGPU(
     auto duration2 = duration_cast<microseconds>(end2 - start2);
     cout << "it takes cudaFree\t\t" << double(duration2.count()) * microseconds::period::num / microseconds::period::den << " seconds" << endl;
 }
+#endif
 
 void solveByGPU(
     sMicroNode *rateNodeArray,
