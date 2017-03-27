@@ -1395,13 +1395,7 @@ void printNodeArrayMatrix()
 
 
 
-void extractRateNode(vector<sRateNode> &extractRateNodeVec)
-{
-	for (int i = 0; i < NNZ; ++i)
-	{
 
-	}
-}
 
 
 // debug:
@@ -1460,12 +1454,6 @@ void unitTest()
     //printList(&permRow[0], M);
     //printList(&permColumn[0], N);
     //printNodeArrayAsMatrix();
-
-	//Ö»´«Èë£¨userId, itemId, rate£©
-	vector<sRateNode> extractRateNodeVec;
-	sRateNode *extractRateNodeArray = NULL;
-	extractRateNode(extractRateNodeVec);
-
     ///*
     CALL_FUN_TIME(solveByGPU(rateNodeArray, matrixUser, matrixItem, worksetArray,
                              mWorkseg, matrixPattern, subBlockNumL, subBlockLen,
