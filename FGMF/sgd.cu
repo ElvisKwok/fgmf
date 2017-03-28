@@ -135,7 +135,7 @@ __global__ void sgd_kernel(
             for(int k = 0; k < K; ++k)
             {
                 error += (*(d_matrixUser + userIdx * K + k)) * (*(d_matrixItem + itemIdx * K + k));
-			}
+            }
 
             //typeRate error = rate - predictRate;
             error = d_rateNodeArray[iRate].rate - error;
