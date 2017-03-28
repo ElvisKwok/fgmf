@@ -312,6 +312,7 @@ void solveByGPU(
     auto duration0 = duration_cast<microseconds>(end0 - start0);
     cout << "it takes cudaMemcpyHostToDevice\t\t" << double(duration0.count()) * microseconds::period::num / microseconds::period::den << " seconds" << endl;
 
+	float curTime = 0.0;
     for(int iter = 0; iter < MAX_ITER; ++iter)
     {
         cudaEvent_t cu_start;
@@ -343,7 +344,10 @@ void solveByGPU(
         cudaEventRecord(cu_stop, 0);
         cudaEventSynchronize(cu_stop);
         cudaEventElapsedTime(&elapsedTime, cu_start, cu_stop);
-        cout << iter << "th iter, elapsedTime:\t" << elapsedTime << "ms" << endl;
+        cout << iter+1 << "th iter, elapsedTime:\t" << elapsedTime << "ms" << endl;
+		curTime += elapsedTime;
+		cout << iter + 1 << "th iter, curTime:\t" << (curTime) / 1000 << "s" << endl;
+		
         // TO-DO
         /*
         auto start2 = system_clock::now();
