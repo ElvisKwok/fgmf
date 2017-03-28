@@ -695,7 +695,8 @@ void newMatrixRandom1D(T* &m, int rowNum, int colNum)
     {
         for(int j = 0; j < colNum; ++j)
         {
-            *(m + i * colNum + j) = (rand() % RAND_MAX) / (typeRate)(RAND_MAX);
+            //*(m + i * colNum + j) = (rand() % RAND_MAX) / (typeRate)(RAND_MAX);
+			*(m + i * colNum + j) = 0.01;
         }
     }
 }

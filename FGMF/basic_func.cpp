@@ -107,6 +107,7 @@ typeRate innerProduct(typeRate *matrixUser, typeRate *matrixItem, int userIdx, i
     for(int k = 0; k < K; ++k)
     {
         predictRate += (*(matrixUser + userIdx * K + k)) * (*(matrixItem + itemIdx * K + k));
+		//cout << predictRate << " += " << (*(matrixUser + userIdx * K + k)) << " * " << (*(matrixItem + itemIdx * K + k)) << endl;
     }
 
     return predictRate;
