@@ -14,7 +14,6 @@
 
 using namespace std;
 extern string inputFile;
-extern string inputFileTest;
 string outputFile;
 
 extern int experimentVar1;
@@ -118,20 +117,15 @@ int main(int argc, char** argv)
     {
         inputFile = argv[1];
     }
-	
-	if (argc > 2)
-	{
-		inputFileTest = argv[2];
-	}
 
-    if(argc > 3)
+    if(argc > 2)
     {
-        outputFile = argv[3];
+        outputFile = argv[2];
     }
 
-	if(argc > 4)
+	if(argc > 3)
 	{
-		experimentVar1 = atoi(argv[4]);
+		experimentVar1 = atoi(argv[3]);
 	}
 
 #if 0

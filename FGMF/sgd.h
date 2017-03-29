@@ -30,9 +30,7 @@ void solveByGPU(
     int subBlockLen,            // 子块大小为 subBlockLen * subBlockLen
     double lambda,              // 正则化系数
     double gamma,               // 学习率
-	int NNZ,                    // 评价值个数
-	sRateNode *rateNodeArrayTest,
-	int NNZ_test
+    int NNZ                     // 评价值个数
 );
 
 #endif
