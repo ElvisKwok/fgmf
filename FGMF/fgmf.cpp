@@ -3,6 +3,7 @@
 #include "test.h"
 
 string parameterFile = "input/parameter.txt";
+string inputFileTest = "input/ra.test_awk";
 string inputFile = "input/ra.train_awk";
 //string inputFile = "input/ra.test_awk";
 //string inputFile = "input/BDMovie";
@@ -40,6 +41,7 @@ int subBlockLen;            // 子块大小为 subBlockLen * subBlockLen, value = max
 int subBlockNodeNum;        // 子块大小size（包含0与非0）, value = subBlockLen * subBlockLen
 
 int NNZ;                    // 非零元素个数，输入文件(user, item, rate)的行数
+int NNZ_test;
 
 int *matrixPattern;     // size: subBlockNumL * subBlockNumL, 即 模式s * 子块t (注意初始化为-1)
 // DELETE
@@ -60,6 +62,9 @@ sWorkseg *mWorkseg;     // size: subBlockNum * subBlockLen, 即 bid*tag
 vector<sRateNode> rateNodeVector;   // 用于动态读取输入
 vector<sRateNode> rateNodeVector_backup;    // 原始备份，矩阵变换后的应用
 sRateNode *rateNodeArray;           // 随着矩阵变换而改动
+
+vector<sRateNode> rateNodeVectorTest;	// test dataset
+sRateNode *rateNodeArrayTest;
 
 // DELETE ?
 sSubBlock *subBlockArray;   // size: subBlockNum个子块
@@ -102,6 +107,11 @@ void readFile(string fileName)
 	parallelReadFile(fileName, rateNodeVector, ompNumThread);
     NNZ = rateNodeVector.size();
     rateNodeArray = &rateNodeVector[0];
+
+	// test data
+	parallelReadFile(inputFileTest, rateNodeVectorTest, ompNumThread);
+	NNZ_test = rateNodeVectorTest.size();
+	rateNodeArrayTest = &rateNodeVectorTest[0];
 }
 
 
@@ -996,6 +1006,16 @@ void matrixShuffleApply()
 		{
 			rateNodeArray[i].u = permRow[rateNodeArray[i].u - 1];   // FIXME: 假设数据集idx： 1~M
 			rateNodeArray[i].i = permColumn[rateNodeArray[i].i - 1];    // FIXME: 假设数据集idx： 1~N
+		}
+	}
+
+#pragma omp parallel num_threads(ompNumThread)
+	{
+#pragma omp for
+		for (int i = 0; i < NNZ_test; ++i)
+		{
+			rateNodeArrayTest[i].u = permRow[rateNodeArrayTest[i].u - 1];   // FIXME: 假设数据集idx： 1~M
+			rateNodeArrayTest[i].i = permColumn[rateNodeArrayTest[i].i - 1];    // FIXME: 假设数据集idx： 1~N
 		}
 	}
 }

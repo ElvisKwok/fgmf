@@ -256,7 +256,9 @@ void solveByGPU(
     int subBlockLen,            // 子块大小为 subBlockLen * subBlockLen
     double lambda,              // 正则化系数
     double gamma,               // 学习率
-    int NNZ                     // 评价值个数
+    int NNZ,                    // 评价值个数
+	sRateNode *rateNodeArrayTest,
+	int NNZ_test
 )
 {
     cudaDeviceProp prop;
@@ -362,7 +364,8 @@ void solveByGPU(
         CHECK(res)
         res = cudaMemcpy(matrixItem, d_matrixItem, N * K * sizeof(typeRate), cudaMemcpyDeviceToHost);
         CHECK(res)
-        cout << "RMSE: " << computeRMSE(rateNodeArray, matrixUser, matrixItem, NNZ) << endl;
+		cout << "train RMSE: " << computeRMSE(rateNodeArray, matrixUser, matrixItem, NNZ) << endl;
+		cout << "test  RMSE: " << computeRMSE(rateNodeArrayTest, matrixUser, matrixItem, NNZ_test) << endl;
 		//auto end2 = system_clock::now();
 		//auto duration2 = duration_cast<microseconds>(end2 - start2);
 		//cout << "it takes computeRMSE\t\t" << double(duration2.count()) * microseconds::period::num / microseconds::period::den << " seconds" << endl;
