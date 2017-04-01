@@ -277,6 +277,9 @@ double getEvenness();
 // 在乱序的rateNodeArray计算subsetArray，省下排序时间
 void computeSubsetArray();
 
+// 将超出边界的虚拟块包含的元素个数subset[bid]标记为-1
+void markVirtualBlock()
+
 // 矩阵行shuffle NNZ版本(基于任意顺序的rateNodeArray)
 // note: 要保存bestPermRow，用于复原, permRow大小为M, 初始化为{1, ..., M}
 void rowShuffle(vector<int> &curPermRow, vector<int> &bestPermRow);

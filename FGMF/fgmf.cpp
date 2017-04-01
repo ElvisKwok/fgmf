@@ -758,8 +758,23 @@ void printNodeArrayAsMatrix()
 // 输出子块nnz的max_diff
 int getMaxDiff()
 {
-    int max = *max_element(subsetArray, subsetArray + subBlockNum);
-    int min = *min_element(subsetArray, subsetArray + subBlockNum);
+    //int max = *max_element(subsetArray, subsetArray + subBlockNum);
+    //int min = *min_element(subsetArray, subsetArray + subBlockNum);
+	int max=0, min=NNZ;
+	int num;
+	for (int bid = 0; bid < subBlockNum; ++bid)
+	{
+		num = subsetArray[bid];
+		if (num == -1)
+		{
+			continue;
+		}
+		else
+		{
+			min = (min < num) ? min : num;
+			max = (max > num) ? max : num;
+		}
+	}
     //printList(subsetArray, subBlockNum);
     return max - min;
 }
@@ -783,6 +798,23 @@ void computeSubsetArray()
         curBid = rateNodeArray[i].bid;
         ++subsetArray[curBid];
     }
+}
+
+// 将超出边界的虚拟块包含的元素个数subset[bid]标记为-1
+void markVirtualBlock()
+{
+	int x, y;	// 子块二维索引
+	int i, j;	// 子块首元素坐标
+	for (int bid = 0; bid < subBlockNum; ++bid)
+	{
+		getBlockXY(bid, x, y);
+		i = x * subBlockLen;
+		j = y * subBlockLen;
+		if (i >= M || j >= N)
+		{
+			subsetArray[bid] = -1;
+		}
+	}
 }
 
 // for random_shuffle
