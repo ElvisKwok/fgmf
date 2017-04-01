@@ -104,7 +104,7 @@ void test()
 		ss << (int)time(NULL);
 		outputFile += ss.str();
 	}
-    freopen(outputFile.c_str(), "w", stdout);
+    //freopen(outputFile.c_str(), "w", stdout);
 	//idMap(inputFile);
     unitTest();
 }

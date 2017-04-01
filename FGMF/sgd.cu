@@ -365,7 +365,8 @@ void solveByGPU(
         res = cudaMemcpy(matrixItem, d_matrixItem, N * K * sizeof(typeRate), cudaMemcpyDeviceToHost);
         CHECK(res)
 		cout << "train RMSE: " << computeRMSE(rateNodeArray, matrixUser, matrixItem, NNZ) << endl;
-		cout << "test  RMSE: " << computeRMSE(rateNodeArrayTest, matrixUser, matrixItem, NNZ_test) << endl;
+		//cout << "test  RMSE: " << computeRMSE(rateNodeArrayTest, matrixUser, matrixItem, NNZ_test) << endl;
+
 		//auto end2 = system_clock::now();
 		//auto duration2 = duration_cast<microseconds>(end2 - start2);
 		//cout << "it takes computeRMSE\t\t" << double(duration2.count()) * microseconds::period::num / microseconds::period::den << " seconds" << endl;

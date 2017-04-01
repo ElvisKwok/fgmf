@@ -109,9 +109,12 @@ void readFile(string fileName)
     rateNodeArray = &rateNodeVector[0];
 
 	// test data
-	parallelReadFile(inputFileTest, rateNodeVectorTest, ompNumThread);
-	NNZ_test = rateNodeVectorTest.size();
-	rateNodeArrayTest = &rateNodeVectorTest[0];
+
+	//parallelReadFile(inputFileTest, rateNodeVectorTest, ompNumThread);
+	//NNZ_test = rateNodeVectorTest.size();
+	//rateNodeArrayTest = &rateNodeVectorTest[0];
+	NNZ_test = 0;
+
 }
 
 
@@ -1477,8 +1480,8 @@ void unitTest()
     ///*
     CALL_FUN_TIME(solveByGPU(rateNodeArray, matrixUser, matrixItem, worksetArray,
                              mWorkseg, matrixPattern, subBlockNumL, subBlockLen,
-                             lambda, gamma,
-                             NNZ))
+                             lambda, gamma,NNZ,
+							 rateNodeArrayTest, NNZ_test))
     //*/
     //callKernel(rateNodeArray, matrixUser, matrixItem, M, N, K, worksetArray, mWorkseg, matrixPattern, subBlockNumL, subBlockLen, NNZ);
     //debug:
